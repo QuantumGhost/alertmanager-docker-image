@@ -1,10 +1,10 @@
-VERSION ?=
+VERSION ?= 0.5.1
 OS ?= linux
 ARCH ?= amd64
 OUTPUT_DIR = dist
-TAG = quantumghost/alertmanager:$(VERSION)
+IMAGE_NAME ?= quantumghost/alertmanager
 SHELL = bash
-
+IMAGE_TAG ?= latest
 DOWNLOAD_URL ?= "https://github.com/prometheus/alertmanager/releases/download/v$(VERSION)/alertmanager-$(VERSION).$(OS)-$(ARCH).tar.gz"
 
 .PHONY: help clean _check_env build push
@@ -36,4 +36,4 @@ build: _check_env alertmanager-$(VERSION).$(OS)-$(ARCH).tar.gz
 	rm -rf '$(OUTPUT_DIR)'
 	mkdir '$(OUTPUT_DIR)'
 	tar --strip-components=1 -xzvf alertmanager-$(VERSION).$(OS)-$(ARCH).tar.gz -C '$(OUTPUT_DIR)'
-	docker build -t $(TAG) --build-arg ALERTMANAGER_VERSION=$(VERSION) .
+	docker build -t "$(IMAGE_NAME):$(IMAGE_TAG)" --build-arg ALERTMANAGER_VERSION=$(VERSION) .
